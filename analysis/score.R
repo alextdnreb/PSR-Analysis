@@ -7,16 +7,16 @@ library(quanteda.dictionaries)
 library(lubridate)
 
 # load dictionary
-liwc_2015 <- dictionary(file = "C:/Users/I567766/Documents/ccs/LIWC2015_English.dic",
+liwc_2015 <- dictionary(file = "LIWC2015_English.dic",
                         format = "LIWC")
 
 # variables to be centered
 vars <- c("weeks_since_last_comment", "weeks_since_video_publication", "weeks_since_last_video", "positivity", "pos_affect", "neg_affect", "word_count")
 
 # load comments and score them
-if (!file.exists("C:/Users/I567766/Documents/ccs/scored_comments.parquet.gzip")) {
+if (!file.exists("scored_comments.parquet.gzip")) {
   map(
-    list.files(path = "C:/Users/I567766/Documents/ccs/ccs-data", full.names = TRUE) %>% 
+    list.files(path = "data", full.names = TRUE) %>% 
       str_subset("meta", negate = TRUE),
     \(file) read_parquet(file) %>%
       corpus(docid_field = "comment_id", text_field = "comment") %>%
@@ -54,7 +54,7 @@ if (!file.exists("C:/Users/I567766/Documents/ccs/scored_comments.parquet.gzip"))
       ) %>% 
       left_join(
         map(
-          list.files("C:/Users/I567766/Documents/ccs/ccs-data/meta", full.names = TRUE),
+          list.files("data/meta", full.names = TRUE),
           \(meta_file) read_parquet(meta_file) %>% 
             mutate(
               video_published_at = as_datetime(published_at),
@@ -114,5 +114,5 @@ if (!file.exists("C:/Users/I567766/Documents/ccs/scored_comments.parquet.gzip"))
     .progress = TRUE
   ) %>%
     list_rbind() %>%
-    write_parquet("C:/Users/I567766/Documents/ccs/scored_comments.parquet.gzip")
+    write_parquet("scored_comments.parquet.gzip")
 }

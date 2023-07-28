@@ -4,7 +4,7 @@ options(arrow.skip_nul = TRUE)
 library(lme4)
 library(lmerTest)
 
-d <- read_parquet("C:/Users/I567766/Documents/ccs/scored_comments.parquet.gzip")
+d <- read_parquet("scored_comments.parquet.gzip")
 View(d)
 
 # modeling --------------------------------------------------------------------
